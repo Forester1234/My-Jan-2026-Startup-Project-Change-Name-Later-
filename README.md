@@ -52,9 +52,12 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Ability to make and join a game
+- Ability to Name and make some character build choices
+- Enables text based communication between players
+- Keeps track of damage dealt to and by the player characters
+- Constantly displays Player Health and resources
+- Saves game and player roles for future sessions
 
 ### Technologies
 
