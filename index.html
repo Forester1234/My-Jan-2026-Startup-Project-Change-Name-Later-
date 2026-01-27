@@ -9,11 +9,13 @@
         <header>
             <h1>Digital Dragons</h1>
             <nav>
-                <!--Links to other pages-->
-                <li><a href="index.html">Login</a></li>
-                <li><a href="startgame.html">Join Game</a></li>
-                <li><a href="character.html">Character Creator</a></li>
-                <li><a href="game.html">Game</a></li>
+                <menu>
+                    <!--Links to other pages-->
+                    <li><a href="index.html">Login</a></li>
+                    <li><a href="startgame.html">Join Game</a></li>
+                    <li><a href="character.html">Character Creator</a></li>
+                    <li><a href="game.html">Game</a></li>
+                </menu>
             </nav>
             <p>By Justin Forester Chapman</p>
         </header>
@@ -21,15 +23,18 @@
         <main>
             <section>
                 <h2>Login</h2>
-                <div>
-                    <label for="username">Player Name:</label>
-                    <input id="username" type="text" placeholder="Enter your name" />
-                </div>
-                <div>
-                    <label for="password">Password</label>
-                    <input id="password" type="text" placeholder="Enter your password" />
-                </div>
-                
+                <form method="get" action="startgame.html">
+                    <div>
+                        <label for="username">Player Name:</label>
+                        <input id="username" type="text" placeholder="Enter your name" />
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input id="password" type="password" placeholder="Enter your password" />
+                    </div>
+                    <button>Login</button>
+                    <button>Create</button>
+                </form>
             </section>
         </main>
     </body>
