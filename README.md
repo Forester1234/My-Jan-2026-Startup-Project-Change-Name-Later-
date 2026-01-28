@@ -86,15 +86,15 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [X] **HTML pages** - I made 4 HTML pages for login, game creation, character creation, & gameplay.
+- [X] **Proper HTML element usage** - I used HTML elements throughout the pages including: header, nav, main, section, footer, form, & ul
+- [X] **Links** - All pages are linked through a navigation menu at the top of each page.
+- [X] **Text** - All pages include text description for things like logging in, character creation elements, & gameplay instructions.
+- [X] **3rd party API placeholder** - There is a placeholder for a dice roller service in game.html.
+- [X] **Images** - game.html has an example image for a map.
+- [X] **Login placeholder** - index.html allows players to enter a username and password and has options for using an existing account or making a new one.
+- [X] **DB data placeholder** - character.html has a projected character section saying that the game will store the character elements including name and stats.
+- [X] **WebSocket placeholder** - The game page includes a Party Actions log to show realtime communication.
 
 ## 🚀 CSS deliverable
 
