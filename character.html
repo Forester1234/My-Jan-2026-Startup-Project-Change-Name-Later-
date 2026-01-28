@@ -21,36 +21,67 @@
         </header>
 
         <main>
-            <h2>Create Your Character</h2>
-            <p>
-                Determine your character for the adventure.
-            </p>
-
-            <form method="get" action="game.html">
-                <div>
-                    <label for="character-name">Character Name:</label>
-                    <input id="character-name" type="text" placeholder="Enter character name" />
-                </div>
+            <section>
+                <h2>Create Your Character</h2>
                 <p>
-                    Distribute 5 points across the following stats with a max of 3 in any stat
+                    Determine your character for the adventure.
                 </p>
-                <div>
-                    <label for="character-health">Health:</label>
-                    <input id="character-health" type="number" value="0" />
-                    <p>Increases how much damage you can take from enemies</p>
-                </div>
-                <div>
-                    <label for="character-skill">Skill:</label>
-                    <input id="character-skill" type="number" value="0" />
-                    <p>Increases how much damage you can inflict with your weapons</p>
-                </div>
-                <div>
-                    <label for="character-magic">Magic:</label>
-                    <input id="character-magic" type="number" value="0" />
-                    <p>Gives you access to increasingly powerful spells</p>
-                </div>
-                <button type="submit">Finish Character</button>
-            </form>
+
+                <form method="get" action="game.html">
+                    <div>
+                        <label for="character-name">Character Name:</label>
+                        <input id="character-name" type="text" placeholder="Enter character name" />
+                    </div>
+                    <p>
+                        Distribute 5 points across the following stats with a max of 3 in any stat
+                    </p>
+                    <div>
+                        <label for="character-health">Health:</label>
+                        <input id="character-health" type="number" value="0" />
+                        <p>Increases how much damage you can take from enemies</p>
+                    </div>
+                    <div>
+                        <label for="character-skill">Skill:</label>
+                        <input id="character-skill" type="number" value="0" />
+                        <p>Increases how much damage you can inflict with your weapons</p>
+                    </div>
+                    <div>
+                        <label for="character-magic">Magic:</label>
+                        <input id="character-magic" type="number" value="0" />
+                        <p>Gives you access to increasingly powerful spells</p>
+                    </div>
+                    <button type="submit">Finish Character</button>
+                </form>
+            </section>
+
+            <section>
+                <h2>Projected Character (Database Data)</h2>
+                <p>
+                    This data will be stored in the database and loaded when the player joins the game.
+                </p>
+                <ul>
+                    <li>
+                        Health: 2
+                        <ul>
+                            <li>Max HP: 17</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Skill: 2
+                        <ul>
+                            <li>Inventory: Sword, Shield</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Magic: 1
+                        <ul>
+                            <li>Level 1 Spells:</li>
+                            <li>Minor Aid: heal 5 Hp</li>
+                            <li>Missile: deal 7 damage</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
         </main>
 
         <footer>
