@@ -11,7 +11,6 @@
 
     <body>
         <header>
-            <h1>Digital Dragons</h1>
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent rounded">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="index.html">Digital Dragons</a>
@@ -32,97 +31,101 @@
         </header>
 
         <main>
-            <!--Column 1-->
-            <section>
-                <h2>Game Controls</h2>
-                <a href="startgame.html"><button type="button">Menu</button></a>
-                <button>Settings</button>
-            </section>
-            <!--Column 2-->
-            <section>
-                <h2>Party</h2>
-                <ul>
-                    <li>
+            <div class="container">
+              <div class="row g-4">
+                <!-- Column 1: Party -->
+                <aside class="col-lg-4">
+                  <section>
+                    <h2>Party</h2>
+                    <ul>
+                      <li>
                         Mordred
                         <ul>
-                            <li>HP: 20</li>
-                            <li>
-                                Inventory: 
-                                <ul>
-                                    <li>Sword</li>
-                                    <li>Poison Arrows</li>
-                                </ul>
-                            </li>
-                            <li>Spells: </li>
+                          <li>HP: 20</li>
+                          <li>
+                            Inventory:
+                            <ul>
+                              <li>Sword</li>
+                              <li>Poison Arrows</li>
+                            </ul>
+                          </li>
+                          <li>Spells: </li>
                         </ul>
-                    </li>
-                    <li>
+                      </li>
+                      <li>
                         Merlin
                         <ul>
-                            <li>HP: 14</li>
-                            <li>
-                                Inventory: 
-                                <ul>
-                                    <li>Staff</li>
-                                </ul>
-                            </li>
-                            <li>
-                                Spells: 
-                                <ul>
-                                    <li>Minor Aid</li>
-                                    <li>Missile</li>
-                                    <li>Greater Aid</li>
-                                    <li>Witch Bolt</li>
-                                    <li>Mage Armor</li>
-                                    <li>Fireball</li>
-                                </ul>
-                            </li>
+                          <li>HP: 14</li>
+                          <li>
+                            Inventory:
+                            <ul>
+                              <li>Staff</li>
+                            </ul>
+                          </li>
+                          <li>
+                            Spells:
+                            <ul>
+                              <li>Minor Aid</li>
+                              <li>Missile</li>
+                              <li>Greater Aid</li>
+                              <li>Witch Bolt</li>
+                              <li>Mage Armor</li>
+                              <li>Fireball</li>
+                            </ul>
+                          </li>
                         </ul>
-                    </li>
-                    <li>
+                      </li>
+                      <li>
                         Arthur
                         <ul>
-                            <li>HP: 11</li>
-                            <li>
-                                Inventory: 
-                                <ul>
-                                    <li>Caliburn</li>
-                                    <li>The spear Ron</li>
-                                </ul>
-                            </li>
-                            <li>
-                                Spells: 
-                                <ul>
-                                    <li>Minor Aid</li>
-                                    <li>Missile</li>
-                                </ul>
-                            </li>
+                          <li>HP: 11</li>
+                          <li>
+                            Inventory:
+                            <ul>
+                              <li>Caliburn</li>
+                              <li>The spear Ron</li>
+                            </ul>
+                          </li>
+                          <li>
+                            Spells:
+                            <ul>
+                              <li>Minor Aid</li>
+                              <li>Missile</li>
+                            </ul>
+                          </li>
                         </ul>
-                    </li>
-                </ul>
-            </section>
-            <!--Column 3-->
-            <section>
-                <h2>Adventure Area</h2>
-                <img src="images/forest-map.png" alt="forest map of the current area" />
+                      </li>
+                    </ul>
+                  </section>
+                </aside>
 
-                <h3>Party Actions (WebSocket Data)</h3>
-                <ul>
-                    <li>Arthur casts Missile</li>
-                    <li>
+                <!-- Column 2: Adventure Area -->
+                <div class="col-lg-8">
+                  <section>
+                    <h2>Adventure Area</h2>
+                    <img src="../images/forest-map.png" alt="forest map of the current area" class="img-fluid rounded" />
+                  </section>
+
+                  <section class="mt-3">
+                    <h3>Party Actions (WebSocket Data)</h3>
+                    <ul>
+                      <li>Arthur casts Missile</li>
+                      <li>
                         Mordred attacks with Sword -
                         <strong>Damage Roll (3rd-Party Dice Service): 1d6 + 5 → 11 damage</strong>
-                    </li>
-                    <li>Merlin: "What should we do next"</li>
-                </ul>
+                      </li>
+                      <li>Merlin: "What should we do next"</li>
+                    </ul>
 
-                <form>
-                    <label for="action">Your message:</label>
-                    <input id="action" type="text" placeholder="Talk to your party" />
-                    <button type="submit">Send</button>
-                </form>
-            </section>
-        </main>
+                    <form class="d-flex gap-2" role="search">
+                      <input id="action" name="message" type="text" class="form-control" placeholder="Talk to your party" />
+                      <button class="btn btn-primary" type="submit">Send</button>
+                    </form>
+                  </section>
+                </div>
+              </div>
+            </div>
+         </main>
 
         <footer>
             <hr />
