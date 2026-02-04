@@ -66,9 +66,24 @@ footer {
 }
 
 .navbar-brand {
-  padding-left: 0.3rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  color: #ffb703;
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: 0.6rem;
+  background: linear-gradient(180deg,#ffd97a 0%, #ffb703 100%);
+  color: #3b2a10 !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.12);
+  border-bottom: none;
+  margin-right: 0.5rem;
+  transition: transform .08s ease, box-shadow .12s ease;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.24);
+  text-decoration: none;
 }
 
 .navbar-nav .nav-item {
@@ -91,6 +106,15 @@ footer a {
 
 .footer-content a {
   text-decoration: underline;
+}
+
+header .navbar-brand,
+header .nav-link {
+  color: #000 !important;
+  font-weight: 600;
+}
+header .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' stroke='%23000' stroke-width='2'><path stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
 }
 
 @media (max-width: 576px) {
