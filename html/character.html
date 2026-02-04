@@ -31,40 +31,50 @@
         </header>
 
         <main>
-            <section>
+            <div class="container">
+              <section class="mb-4">
                 <h2>Create Your Character</h2>
-                <p>
-                    Determine your character for the adventure.
-                </p>
+                <p>Determine your character for the adventure.</p>
 
-                <form method="get" action="game.html">
-                    <div>
-                        <label for="character-name">Character Name:</label>
-                        <input id="character-name" type="text" placeholder="Enter character name" />
+                <form method="get" action="game.html" class="row g-3">
+                  <div class="col-12">
+                    <label for="character-name" class="form-label">Character Name</label>
+                    <input id="character-name" name="name" type="text" class="form-control" placeholder="Enter character name">
+                  </div>
+
+                  <div class="col-12">
+                    <p class="mb-1">Distribute 5 points across the following stats (max 3 in any stat)</p>
+                  </div>
+
+                  <div class="col-12 col-md-4">
+                    <label for="character-health" class="form-label">Health</label>
+                    <div class="input-group stat-row">
+                      <input id="character-health" name="health" type="number" class="form-control text-center" value="0" min="0" max="3" aria-label="Health value">
                     </div>
-                    <p>
-                        Distribute 5 points across the following stats with a max of 3 in any stat
-                    </p>
-                    <div>
-                        <label for="character-health">Health:</label>
-                        <input id="character-health" type="number" value="0" />
-                        <p>Increases how much damage you can take from enemies</p>
+                    <div class="form-text">Increases how much damage you can take</div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="character-skill" class="form-label">Skill</label>
+                    <div class="input-group stat-row">
+                      <input id="character-skill" name="skill" type="number" class="form-control text-center" value="0" min="0" max="3" aria-label="Skill value">
                     </div>
-                    <div>
-                        <label for="character-skill">Skill:</label>
-                        <input id="character-skill" type="number" value="0" />
-                        <p>Increases how much damage you can inflict with your weapons</p>
+                    <div class="form-text">Increases weapon damage</div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="character-magic" class="form-label">Magic</label>
+                    <div class="input-group stat-row">
+                      <input id="character-magic" name="magic" type="number" class="form-control text-center" value="0" min="0" max="3" aria-label="Magic value">
                     </div>
-                    <div>
-                        <label for="character-magic">Magic:</label>
-                        <input id="character-magic" type="number" value="0" />
-                        <p>Gives you access to increasingly powerful spells</p>
-                    </div>
-                    <button type="submit">Finish Character</button>
+                    <div class="form-text">Gives access to spells</div>
+                  </div>
+
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary" name="action" value="first">Finish Character</button>
+                  </div>
                 </form>
-            </section>
-
-            <section>
+              </section>
+            </div>
+            <!--<section>
                 <h2>Projected Character (Database Data)</h2>
                 <p>
                     This data will be stored in the database and loaded when the player joins the game.
@@ -94,7 +104,7 @@
                         </ul>
                     </li>
                 </ul>
-            </section>
+            </section>-->
         </main>
 
         <footer>
