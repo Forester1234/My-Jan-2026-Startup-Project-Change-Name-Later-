@@ -4,9 +4,9 @@ import './app.css';
 
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
-import { Scores } from './startgame/startgame';
-import { Play } from './character/character';
-import { About } from './game/game';
+import { JoinGame } from './startgame/startgame';
+import { CharacterCreator } from './character/character';
+import { Game } from './game/game';
 
 export default function App() {
   return (
@@ -15,7 +15,7 @@ export default function App() {
         <header>
           <nav className="navbar navbar-expand-lg navbar-light bg-transparent rounded">
             <div className="container-fluid">
-              <a className="navbar-brand" href="index.html">Digital Dragons</a>
+              <NavLink className="navbar-brand" to="/login">Digital Dragons</NavLink>
               <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button>
@@ -31,7 +31,14 @@ export default function App() {
           </nav>
         </header>
 
-        <main>App will display here</main>
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/startgame' element={<JoinGame />} />
+          <Route path='/character' element={<CharacterCreator />} />
+          <Route path='/game' element={<Game />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
         
         <footer>
           <hr />
@@ -43,4 +50,8 @@ export default function App() {
       </div>
     </BrowserRouter>
   );
+}
+
+function NotFound() {
+  return <main className="container-fluid bg-secondary text-center">404: Return to sender. Address unknown.</main>;
 }
