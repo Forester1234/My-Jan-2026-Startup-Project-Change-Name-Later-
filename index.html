@@ -1,66 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Digital Dragons</title>
-        
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        
-        <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
-
-        <link rel="stylesheet" href= "css/main.css">
-    </head>
-
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-transparent rounded">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="index.html">Digital Dragons</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navMenu">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Login</a></li>
-                            <li class="nav-item"><a class="nav-link" href="startgame.html">Join Game</a></li>
-                            <li class="nav-item"><a class="nav-link" href="character.html">Character Creator</a></li>
-                            <li class="nav-item"><a class="nav-link" href="game.html">Game</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <hr />
-        </header>
-
-        <main>
-            <section>
-                <h2>Login</h2>
-                <form method="get" action="startgame.html">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Player Name</label>
-                        <input id="username" name="username" type="text" class="form-control" placeholder="Enter your name" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input id="password" name="password" type="password" class="form-control" placeholder="Enter your password" />
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-primary" type="submit" name="action" value="first">Login</button>
-                        <button class="btn btn-outline-secondary" type="submit" name="action" value="second">Create</button>
-                    </div>
-                </form>
-            </section>
-        </main>
-        
-        <footer>
-            <hr />
-            <div class="footer-content">
-                <span class="text-reset">Justin Forester Chapman</span>
-                <a href="https://github.com/Forester1234/Foresters-Digital-Dragons-Game" target="_blank" rel="noopener noreferrer">Github</a>
-            </div>
-        </footer>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Dragons</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.jsx"></script>
+  </body>
 </html>
