@@ -11,7 +11,7 @@ import { Game } from './game/game';
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="body bg-dark text-light">
+      <div className="body">
         <header>
           <nav className="navbar navbar-expand-lg navbar-light bg-transparent rounded">
             <div className="container-fluid">
