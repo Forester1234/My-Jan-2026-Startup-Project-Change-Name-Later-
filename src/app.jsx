@@ -4,8 +4,8 @@ import './app.css';
 
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
-import { JoinGame } from './startgame/startgame';
-import { CharacterCreator } from './character/character';
+import { StartGame } from './startgame/startgame';
+import { Character } from './character/character';
 import { Game } from './game/game';
 
 export default function App() {
@@ -34,8 +34,8 @@ export default function App() {
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/startgame' element={<JoinGame />} />
-          <Route path='/character' element={<CharacterCreator />} />
+          <Route path='/startgame' element={<StartGame />} />
+          <Route path='/character' element={<Character />} />
           <Route path='/game' element={<Game />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
