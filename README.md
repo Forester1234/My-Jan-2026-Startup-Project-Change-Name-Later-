@@ -111,9 +111,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Bundled using Vite** - I did not complete this part of the deliverable.
-- [ ] **Components** - I did not complete this part of the deliverable.
-- [ ] **Router** - I did not complete this part of the deliverable.
+- [X] **Bundled using Vite** - I installed and used Vite and can run the app with npm run dev.
+- [X] **Components** - I have 4 components; login, startgame, character, and the game. All of which now use jsx files.
+- [X] **Router** - My React Router is set up to navigate between the /login, /startgame, /character, and /game pages, with a 404 fallback for unknown routes.
 
 ## 🚀 React part 2: Reactivity deliverable
 
