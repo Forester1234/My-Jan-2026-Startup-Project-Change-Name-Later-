@@ -7,11 +7,11 @@ export function Login() {
         <h2>Login</h2>
         <form method="get" action="startgame.html">
           <div className="mb-3">
-            <label for="username" className="form-label">Player Name</label>
+            <label htmlFor="username" className="form-label">Player Name</label>
             <input id="username" name="username" type="text" className="form-control" placeholder="Enter your name" />
           </div>
           <div className="mb-3">
-            <label for="password" className="form-label">Password</label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input id="password" name="password" type="password" className="form-control" placeholder="Enter your password" />
           </div>
           <div className="d-flex gap-2">
