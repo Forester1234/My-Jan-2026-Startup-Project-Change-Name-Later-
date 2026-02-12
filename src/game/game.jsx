@@ -1,5 +1,6 @@
 import React from 'react';
 import './game.css';
+import forestMap from '../../images/forest-map.png';
 
 export function Game() {
   return (
@@ -62,7 +63,7 @@ export function Game() {
           {/* Column 2: Adventure Area */}
           <div className="col-lg-8">
             <section className="framed">
-              <img src="images/forest-map.png" alt="forest map of the current area" className="img-fluid rounded adventure-map" />
+              <img src={forestMap} alt="forest map of the current area" className="img-fluid rounded adventure-map" />
             </section>
 
             <section className="mt-3 framed">
