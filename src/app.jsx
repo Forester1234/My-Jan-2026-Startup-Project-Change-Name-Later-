@@ -1,18 +1,19 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './app.css';
-
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
 import { StartGame } from './startgame/startgame';
 import { Character } from './character/character';
 import { Game } from './game/game';
 import { AuthState } from './login/authState';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './app.css';
 
 function App() {
-  const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
   const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
   const [authState, setAuthState] = React.useState(currentAuthState);
+  const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
+  const [selectedGame, setSelectedGame] = React.useState(null);
+  const [character, setCharacter] = React.useState(null);
   return (
     <BrowserRouter>
       <div className="body">
@@ -25,10 +26,32 @@ function App() {
               </button>
               <div className="collapse navbar-collapse" id="navMenu">
                 <ul className="navbar-nav ms-auto">
-                  <li className="nav-item"><NavLink className="nav-link" to="/login">Login</NavLink></li>
-                  <li className="nav-item"><NavLink className="nav-link" to="/startgame">Join Game</NavLink></li>
-                  <li className="nav-item"><NavLink className="nav-link" to="/character">Character Creator</NavLink></li>
-                  <li className="nav-item"><NavLink className="nav-link" to="/game">Game</NavLink></li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/login">
+                      Login
+                    </NavLink>
+                  </li>
+                  {authState === AuthState.Authenticated && (
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/startgame">
+                        Join Game
+                      </NavLink>
+                    </li>
+                  )}
+                  {selectedGame && (
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/character">
+                        Character Creator
+                      </NavLink>
+                    </li>
+                  )}
+                  {selectedGame && character && (
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/game">
+                        Game
+                      </NavLink>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
