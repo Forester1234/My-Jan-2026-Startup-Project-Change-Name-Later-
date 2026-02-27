@@ -59,9 +59,8 @@ function App() {
         </header>
 
         <Routes>
-          <Route path='/' element={<Login />} />
           <Route
-            path='/login'
+            path="/"
             element={
               <Login
                 userName={userName}
@@ -72,7 +71,19 @@ function App() {
                 }}
               />
             }
-            exact
+          />
+          <Route
+            path="/login"
+            element={
+              <Login
+                userName={userName}
+                authState={authState}
+                onAuthChange={(userName, authState) => {
+                  setAuthState(authState);
+                  setUserName(userName);
+                }}
+              />
+            }
           />
           <Route
             path='/startgame'
