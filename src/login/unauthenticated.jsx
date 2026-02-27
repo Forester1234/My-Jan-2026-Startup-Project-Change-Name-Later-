@@ -27,41 +27,63 @@ export function Unauthenticated(props) {
   }
 
   return (
-    <>
-        <div className="login-form container text-center mt-5">
+    <main>
+        <section>
             <h2>Login or Create Account</h2>
-            <div className="input-group mb-3">
-            <span className="input-group-text">@</span>
-            <input
-                className="form-control"
-                type="text"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                placeholder="Player Name"
-            />
-            </div>
-            <div className="input-group mb-3">
-                <span className="input-group-text">🔒</span>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className="mb-3">
+                <label htmlFor="username" className="form-label">
+                  Player Name
+                </label>
                 <input
-                    className="form-control"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
+                  id="username"
+                  name="username"
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter your name"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
                 />
-            </div>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  className="form-control"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
 
-            <div className="d-flex justify-content-center gap-2">
-                <Button variant="primary" onClick={loginUser} disabled={!userName || !password}>
-                    Login
+              <div className="d-flex justify-content-center gap-2">
+                <Button
+                  type="button"
+                  name="action"
+                  value="first"
+                  onClick={loginUser}
+                  disabled={!userName || !password}
+                >
+                  Login
                 </Button>
-                <Button variant="secondary" onClick={createUser} disabled={!userName || !password}>
-                    Create
+                <Button
+                  type="button"
+                  name="action"
+                  value="second"
+                  onClick={createUser}
+                  disabled={!userName || !password}
+                >
+                  Create
                 </Button>
-            </div>
-        </div>
+              </div>
+            </form>
+        </section>
 
         <MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
-    </>
+    </main>
   );
 }
