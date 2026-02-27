@@ -28,8 +28,28 @@ export function Unauthenticated(props) {
 
   return (
     <>
-        <div>
-            
+        <div className="login-form container text-center mt-5">
+            <h2>Login or Create Account</h2>
+            <div className="input-group mb-3">
+            <span className="input-group-text">@</span>
+            <input
+                className="form-control"
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                placeholder="Player Name"
+            />
+            </div>
+            <div className="input-group mb-3">
+                <span className="input-group-text">🔒</span>
+                <input
+                    className="form-control"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                />
+            </div>
 
             <div className="d-flex justify-content-center gap-2">
                 <Button variant="primary" onClick={loginUser} disabled={!userName || !password}>
