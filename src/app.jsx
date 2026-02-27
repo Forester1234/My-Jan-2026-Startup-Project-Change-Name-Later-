@@ -9,9 +9,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
 function App() {
+  const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
   const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
   const [authState, setAuthState] = React.useState(currentAuthState);
-  const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
   const [selectedGame, setSelectedGame] = React.useState(null);
   const [character, setCharacter] = React.useState(null);
   return (
@@ -60,10 +60,40 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/startgame' element={<StartGame />} />
-          <Route path='/character' element={<Character />} />
-          <Route path='/game' element={<Game />} />
+          <Route
+            path='/login'
+            element={
+              <Login
+                userName={userName}
+                authState={authState}
+                onAuthChange={(userName, authState) => {
+                  setAuthState(authState);
+                  setUserName(userName);
+                }}
+              />
+            }
+            exact
+          />
+          <Route
+            path='/startgame'
+            element={<StartGame onGameSelect={setSelectedGame} />}
+          />
+          <Route
+            path="/character"
+            element={
+              selectedGame
+                ? <Character onCharacterCreate={setCharacter} />
+                : <StartGame onGameSelect={setSelectedGame} />
+            }
+          />
+          <Route
+            path="/game"
+            element={
+              selectedGame && character
+                ? <Game character={character} />
+                : <StartGame />
+            }
+          />
           <Route path='*' element={<NotFound />} />
         </Routes>
         
