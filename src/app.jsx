@@ -93,6 +93,7 @@ function App() {
               <StartGame
                 onGameSelect={setSelectedGame}
                 setRole={setRole}
+                character={character}
               />
             }
           />
