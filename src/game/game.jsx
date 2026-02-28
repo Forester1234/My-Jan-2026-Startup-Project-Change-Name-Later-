@@ -6,16 +6,20 @@ export function Game({ role, character, selectedGame }) {
   const [messages, setMessages] = React.useState([]);
   const [input, setInput] = React.useState('');
   const chatRef = React.useRef(null);
+  const [mapImage, setMapImage] = React.useState(forestMap);
+  const [mapInput, setMapInput] = React.useState('');
 
   React.useEffect(() => {
     if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+      requestAnimationFrame(() => {
+        chatRef.current.scrollTop = chatRef.current.scrollHeight;
+      });
     }
   }, [messages]);
 
   function handleSend(e) {
     e.preventDefault();
-    if (!input) return;
+    if (!input.trim) return;
 
     const senderName =
       role === 'gm'
@@ -24,13 +28,15 @@ export function Game({ role, character, selectedGame }) {
 
     const newMessage = {
       sender: senderName,
-      text: input,
+      text: input.trim(),
     };
 
     setMessages((prev) => [...prev, newMessage]);
     setInput('');
   }
 
+
+  
   return (
     <main>
       <div className="container">
@@ -66,11 +72,42 @@ export function Game({ role, character, selectedGame }) {
           <div className="col-lg-8">
             <section className="framed">
               <img
-                src={forestMap}
-                alt="forest map of the current area"
+                src={mapImage}
+                onError={() => setMapImage(forestMap)}
+                alt="adventure map"
                 className="img-fluid rounded adventure-map"
               />
             </section>
+            {role === 'gm' && (
+              <section className="mt-3 framed">
+                <h4>Change Map</h4>
+                <form
+                  className="d-flex gap-2"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!mapInput.trim()) return;
+                    setMapImage(mapInput.trim());
+                    setMapInput('');
+                  }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Paste image URL"
+                    value={mapInput}
+                    onChange={(e) => setMapInput(e.target.value)}
+                  />
+                  <button 
+                    type="submit"
+                    name="action"
+                    value="first"
+                  >
+                    Update
+                  </button>
+                </form>
+              </section>
+            )}
+
 
             <section className="mt-3 framed">
               <h3>Party Actions</h3>
