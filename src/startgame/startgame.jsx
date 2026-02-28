@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export function StartGame({ onGameSelect }) {
+export function StartGame({ onGameSelect, setRole }) {
   const navigate = useNavigate();
   const [adventure, setAdventure] = React.useState('');
 
@@ -10,11 +10,17 @@ export function StartGame({ onGameSelect }) {
 
     const gameData = {
       name: adventure,
-      type: type,
     };
 
     onGameSelect(gameData);
-    navigate('/character');
+
+    if (type === 'join') {
+      setRole('player');
+      navigate('/character');
+    } else if (type === 'create') {
+      setRole('gm');
+      navigate('/game');
+    }
   }
 
   return (

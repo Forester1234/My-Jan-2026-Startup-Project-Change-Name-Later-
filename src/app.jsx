@@ -14,6 +14,8 @@ function App() {
   const [authState, setAuthState] = React.useState(currentAuthState);
   const [selectedGame, setSelectedGame] = React.useState(null);
   const [character, setCharacter] = React.useState(null);
+  const [role, setRole] = React.useState(null);
+
   return (
     <BrowserRouter>
       <div className="body">
@@ -87,7 +89,12 @@ function App() {
           />
           <Route
             path='/startgame'
-            element={<StartGame onGameSelect={setSelectedGame} />}
+            element={
+              <StartGame
+                onGameSelect={setSelectedGame}
+                setRole={setRole}
+              />
+            }
           />
           <Route
             path="/character"
@@ -100,9 +107,13 @@ function App() {
           <Route
             path="/game"
             element={
-              selectedGame && character
-                ? <Game character={character} />
-                : <StartGame />
+              selectedGame &&
+              (
+                role === 'gm' ||
+                (role === 'player' && character)
+              )
+                ? <Game role={role} character={character} />
+                : <StartGame onGameSelect={setSelectedGame} setRole={setRole} />
             }
           />
           <Route path='*' element={<NotFound />} />
