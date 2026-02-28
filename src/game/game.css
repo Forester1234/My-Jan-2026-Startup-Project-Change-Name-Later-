@@ -26,3 +26,14 @@
 .party-member ul { margin:0; padding-left:1rem; color:#2b1f0f; }
 
 .party-member ul ul { margin-top:0.25rem; padding-left:1rem; }
+
+.chat-box {
+  height: 300px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.chat-box li {
+  margin-bottom: 0.4rem;
+}

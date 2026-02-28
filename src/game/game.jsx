@@ -5,12 +5,29 @@ import forestMap from '../../images/forest-map.png';
 export function Game({ role, character, selectedGame }) {
   const [messages, setMessages] = React.useState([]);
   const [input, setInput] = React.useState('');
+  const chatRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   function handleSend(e) {
     e.preventDefault();
     if (!input) return;
 
-    setMessages([...messages, input]);
+    const senderName =
+      role === 'gm'
+        ? 'GM'
+        : character?.name || 'Player';
+
+    const newMessage = {
+      sender: senderName,
+      text: input,
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
     setInput('');
   }
 
@@ -58,11 +75,18 @@ export function Game({ role, character, selectedGame }) {
             <section className="mt-3 framed">
               <h3>Party Actions</h3>
 
-              <ul>
-                {messages.map((msg, index) => (
-                  <li key={index}>{msg}</li>
-                ))}
-              </ul>
+              <div
+                ref={chatRef}
+                className="chat-box mb-2"
+              >
+                <ul className="list-unstyled mb-0">
+                  {messages.map((msg, index) => (
+                    <li key={index}>
+                      <strong>{msg.sender}:</strong> {msg.text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
               <form 
                 className="d-flex gap-2"
