@@ -14,7 +14,6 @@ export function Authenticated(props) {
     <section className="container text-center mt-5">
       <h2>Welcome, {props.userName}!</h2>
       <div>
-        <div className='playerName'>{props.userName}</div>
         <div className="d-flex justify-content-center gap-2">
           <Button
             type="button"
