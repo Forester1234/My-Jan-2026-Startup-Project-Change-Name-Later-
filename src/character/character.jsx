@@ -1,47 +1,136 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export function Character() {
+export function Character({onCharacterCreate}) {
+  const navigate = useNavigate();
+
+  const [name, setName] = React.useState('');
+  const [health, setHealth] = React.useState(0);
+  const [skill, setSkill] = React.useState(0);
+  const [magic, setMagic] = React.useState(0);
+  const [error, setError] = React.useState(null);
+
+  function handleSubmit() {
+    setError(null);
+
+    const total = Number(health) + Number(skill) + Number(magic);
+
+    if (!name) {
+      setError('Please enter a character name.');
+      return;
+    }
+
+    if (total !== 5) {
+      setError('Must distribute 5 points.');
+      return;
+    }
+
+    const characterData = {
+      name, 
+      health: Number(health),
+      skill: Number(skill),
+      magic: Number(magic)
+    };
+
+    onCharacterCreate(characterData);
+    navigate('/game');
+  }
+
+  const total = health + skill + magic;
+  const remaining = 5 - total;
+
   return (
     <main>
       <div className="container">
         <section className="mb-4">
           <h2>Create Your Character</h2>
-          <p>Determine your character for the adventure.</p>
+          <p>Distribute 5 points across the following stats (max 3 in any stat)</p>
 
-          <form method="get" action="game.html" className="row g-3">
+          {error && <div className="text-danger mb-3">{error}</div>}
+
+          <form onSubmit={(e) => e.preventDefault()} className="row g-3">
             <div className="col-12">
-              <label htmlFor="character-name" className="form-label">Character Name</label>
-              <input id="character-name" name="name" type="text" className="form-control" placeholder="Enter character name"/>
+              <label htmlFor="character-name" className="form-label">
+                Character Name
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter character name"
+              />
             </div>
 
-            <div className="col-12">
-              <p className="mb-1">Distribute 5 points across the following stats (max 3 in any stat)</p>
+            <p>Points remaining: <strong>{remaining}</strong></p>
+
+            <div className="col-12 col-md-4">
+              <label htmlFor="character-health" className="form-label">
+                Health
+              </label>
+              <div className="input-group stat-row">
+                <input
+                  type="number"
+                  className="form-control text-center"
+                  min="0"
+                  max="3"
+                  value={health}
+                  onChange={(e) => setHealth(Number(e.target.value))}
+                />
+              </div>
+              <div className="form-text">
+                Increases how much damage you can take
+              </div>
             </div>
 
             <div className="col-12 col-md-4">
-              <label htmlFor="character-health" className="form-label">Health</label>
+              <label htmlFor="character-skill" className="form-label">
+                Skill
+              </label>
               <div className="input-group stat-row">
-                <input id="character-health" name="health" type="number" className="form-control text-center" value="0" min="0" max="3" aria-label="Health value"/>
+                <input
+                  type="number"
+                  className="form-control text-center"
+                  min="0"
+                  max="3"
+                  value={skill}
+                  onChange={(e) => setSkill(Number(e.target.value))}
+                />
               </div>
-              <div className="form-text">Increases how much damage you can take</div>
-            </div>
-            <div className="col-12 col-md-4">
-              <label htmlFor="character-skill" className="form-label">Skill</label>
-              <div className="input-group stat-row">
-                <input id="character-skill" name="skill" type="number" className="form-control text-center" value="0" min="0" max="3" aria-label="Skill value"/>
+              <div className="form-text">
+                Increases weapon damage
               </div>
-              <div className="form-text">Increases weapon damage</div>
-            </div>
-            <div className="col-12 col-md-4">
-              <label htmlFor="character-magic" className="form-label">Magic</label>
-              <div className="input-group stat-row">
-                <input id="character-magic" name="magic" type="number" className="form-control text-center" value="0" min="0" max="3" aria-label="Magic value"/>
-              </div>
-              <div className="form-text">Gives access to spells</div>
             </div>
 
+            <div className="col-12 col-md-4">
+              <label htmlFor="character-magic" className="form-label">
+                Magic
+              </label>
+              <div className="input-group stat-row">
+                <input
+                  type="number"
+                  className="form-control text-center"
+                  min="0"
+                  max="3"
+                  value={magic}
+                  onChange={(e) => setMagic(Number(e.target.value))}
+                />
+              </div>
+              <div className="form-text">
+                Gives access to spells
+              </div>
+            </div>
+
+
             <div className="col-12">
-              <button type="submit" className="btn btn-primary" name="action" value="first">Finish Character</button>
+              <button
+                type="button"
+                name="action"
+                value="first"
+                onClick={handleSubmit}
+              >
+                Finish Character
+              </button>
             </div>
           </form>
         </section>
