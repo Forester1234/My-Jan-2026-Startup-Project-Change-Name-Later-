@@ -465,7 +465,7 @@ export function Game({ role, character, selectedGame }) {
                       className="form-control"
                       value={monsterAttack}
                       onChange={(e) => setMonsterAttack(e.target.value)}
-                      placeholder="3"
+                      placeholder="3d6"
                     />
                   </div>
                   <div className="col-12">
