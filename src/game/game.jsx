@@ -9,6 +9,11 @@ export function Game({ role, character, selectedGame }) {
   const [mapImage, setMapImage] = React.useState(forestMap);
   const [mapInput, setMapInput] = React.useState('');
 
+  const [monsters, setMonsters] = React.useState([]);
+  const [monsterName, setMonsterName] = React.useState('');
+  const [monsterHP, setMonsterHP] = React.useState('');
+  const [monsterAttack, setMonsterAttack] = React.useState('');
+
   React.useEffect(() => {
     if (chatRef.current) {
       requestAnimationFrame(() => {
@@ -36,7 +41,7 @@ export function Game({ role, character, selectedGame }) {
   }
 
 
-  
+
   return (
     <main>
       <div className="container">
@@ -107,6 +112,102 @@ export function Game({ role, character, selectedGame }) {
                 </form>
               </section>
             )}
+
+            {role === 'gm' && (
+              <section className="mt-3 framed">
+                <h4>Create Monster</h4>
+                <form
+                  className="row g-2 align-items-end"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!monsterName || !monsterHP || !monsterAttack) return;
+
+                    setMonsters((prev) => [
+                      ...prev,
+                      {
+                        name: monsterName,
+                        hp: Number(monsterHP),
+                        attack: monsterAttack,
+                      },
+                    ]);
+
+                    setMonsterName('');
+                    setMonsterHP('');
+                    setMonsterAttack('');
+                  }}
+                >
+                  <div className="col-4">
+                    <label className="form-label">Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={monsterName}
+                      onChange={(e) => setMonsterName(e.target.value)}
+                      placeholder="Monster Name"
+                    />
+                  </div>
+                  <div className="col-4">
+                    <label className="form-label">HP</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={monsterHP}
+                      onChange={(e) => setMonsterHP(e.target.value)}
+                      placeholder="Health"
+                      min="1"
+                    />
+                  </div>
+                  <div className="col-4">
+                    <label className="form-label">Attack</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={monsterAttack}
+                      onChange={(e) => setMonsterAttack(e.target.value)}
+                      placeholder="1d6+2"
+                    />
+                  </div>
+                  <div className="col-12">
+                    <button 
+                      type="submit"
+                      name="action"
+                      value="first"
+                    >
+                      Add Monster
+                    </button>
+                  </div>
+                </form>
+              </section>
+            )}
+
+            <section className="framed mt-3">
+              <h3>Monsters</h3>
+              {monsters.length === 0 ? (
+                <p>No monsters yet.</p>
+              ) : (
+                <ul className="list-group">
+                  {monsters.map((m, i) => (
+                    <li key={i} className="list-group-item d-flex justify-content-between align-items-center">
+                      <span>
+                        <strong>{m.name}</strong> — HP: {m.hp} — Attack: {m.attack}
+                      </span>
+                      {role === 'gm' && (
+                        <button
+                          type="button"
+                          name="action"
+                          value="second"
+                          onClick={() =>
+                            setMonsters(monsters.filter((_, index) => index !== i))
+                          }
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
 
 
             <section className="mt-3 framed">
