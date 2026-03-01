@@ -3,11 +3,14 @@ import './game.css';
 import forestMap from '../../images/forest-map.png';
 
 export function Game({ role, character, selectedGame }) {
+  const [players, setPlayers] = React.useState([]);
   const [spellUses, setSpellUses] = React.useState(
     character?.magicStat || 0
   );
   const [selectedTarget, setSelectedTarget] = React.useState('');
   const [selectedSpellTargets, setSelectedSpellTargets] = React.useState([]);
+
+  const [selectedMonster, setSelectedMonster] = React.useState('');
 
   const [messages, setMessages] = React.useState([]);
   const [input, setInput] = React.useState('');
@@ -19,6 +22,20 @@ export function Game({ role, character, selectedGame }) {
   const [monsterName, setMonsterName] = React.useState('');
   const [monsterHP, setMonsterHP] = React.useState('');
   const [monsterAttack, setMonsterAttack] = React.useState('');
+
+  React.useEffect(() => {
+    if (players.length === 0) {
+      setPlayers([
+        {
+          name: 'Test Player',
+          currentHP: 20,
+          maxHP: 20,
+          skillStat: 2,
+          magicStat: 1,
+        }
+      ]);
+    }
+  }, []);
 
   React.useEffect(() => {
     if (monsters.length === 0) {
@@ -106,6 +123,49 @@ export function Game({ role, character, selectedGame }) {
     return { targetName, died };
   }
 
+  function handleMonsterAttack() {
+    if (selectedTarget === '' || selectedMonster === '') return;
+
+    const monsterIndex = Number(selectedMonster);
+    const monster = monsters[monsterIndex];
+    const targetIndex = Number(selectedTarget);
+    const targetPlayer = players[targetIndex];
+
+    if (!targetPlayer) return;
+
+    let damage = 0;
+    const attackStr = monster.attack.trim();
+
+    const diceMatch = attackStr.match(/(\d+)d(\d+)(\+(\d+))?/);
+    if (diceMatch) {
+      const count = Number(diceMatch[1]);
+      const sides = Number(diceMatch[2]);
+      const bonus = diceMatch[4] ? Number(diceMatch[4]) : 0;
+
+      for (let i = 0; i < count; i++) {
+        damage += Math.floor(Math.random() * sides) + 1;
+      }
+      damage += bonus;
+    } else if (!isNaN(Number(attackStr))) {
+      damage = Number(attackStr);
+    }
+
+    const newHP = Math.max(0, targetPlayer.currentHP - damage);
+
+    setPlayers(prev =>
+      prev.map((p, i) => i === targetIndex ? { ...p, currentHP: newHP } : p)
+    );
+
+    setMessages(prev => [
+      ...prev,
+      { sender: monster.name, text: `${monster.name} attacks ${targetPlayer.name} for ${damage} damage!` },
+      ...(newHP <= 0 ? [{ sender: 'System', text: `${targetPlayer.name} has been defeated!` }] : [])
+    ]);
+
+    setSelectedTarget('');
+    setSelectedMonster('');
+  }
+
   function handleSend(e) {
     e.preventDefault();
     if (!input.trim()) return;
@@ -139,6 +199,15 @@ export function Game({ role, character, selectedGame }) {
           <aside className="col-lg-4">
             <section className="framed">
               <h2>Party</h2>
+
+              {role === 'gm' && players.map((p, i) => (
+                <div key={i} className="party-member">
+                  <strong>{p.name} (Test)</strong>
+                  <div>HP: {p.currentHP} / {p.maxHP}</div>
+                  <div>Skill: {p.skillStat}</div>
+                  <div>Magic: {p.magicStat}</div>
+                </div>
+              ))}
               
               {role === 'player' && character && (
                 <div className="party-member">
@@ -178,9 +247,16 @@ export function Game({ role, character, selectedGame }) {
                               disabled={selectedTarget === ''}
                               onClick={() => {
                                 const damage = rollDice(weapon.dice);
-                                const targetIndex = Number(selectedTarget);
+                                const targetPlayerIndex = Number(selectedTarget);
+                                const targetPlayer = players[targetPlayerIndex];
 
-                                const { targetName, died } = applyDamageToMonster(targetIndex, damage);
+                                const newHP = Math.max(0, targetPlayer.currentHP - damage);
+
+                                setPlayers(prev =>
+                                  prev.map((p, i) =>
+                                    i === targetPlayerIndex ? { ...p, currentHP: newHP } : p
+                                  )
+                                );
 
                                 setMessages(prev => [
                                   ...prev,
@@ -389,7 +465,7 @@ export function Game({ role, character, selectedGame }) {
                       className="form-control"
                       value={monsterAttack}
                       onChange={(e) => setMonsterAttack(e.target.value)}
-                      placeholder="1d6+2"
+                      placeholder="3"
                     />
                   </div>
                   <div className="col-12">
@@ -433,6 +509,44 @@ export function Game({ role, character, selectedGame }) {
                 </ul>
               )}
             </section>
+
+            {role === 'gm' && (
+              <section className="mt-3 framed">
+                <h4>Attack Player</h4>
+                <div className="d-flex gap-2 align-items-end">
+                  <select
+                    className="form-select"
+                    value={selectedMonster}
+                    onChange={(e) => setSelectedMonster(e.target.value)}
+                  >
+                    <option value="">Choose monster</option>
+                    {monsters.map((m, i) => (
+                      <option key={i} value={i}>{m.name}</option>
+                    ))}
+                  </select>
+                  <select
+                    className="form-select"
+                    value={selectedTarget}
+                    onChange={(e) => setSelectedTarget(e.target.value)}
+                  >
+                    <option value="">Choose player</option>
+                    {players.map((p, i) => (
+                      <option key={i} value={i}>{p.name}</option>
+                    ))}
+                  </select>
+
+                  <button
+                    type="submit"
+                    name="action"
+                    value="first"
+                    onClick={() => handleMonsterAttack()}
+                    disabled={!selectedTarget || selectedMonster === ''}
+                  >
+                    Attack Player
+                  </button>
+                </div>
+              </section>
+            )}
 
 
             <section className="mt-3 framed">
