@@ -25,11 +25,15 @@ export function Character({onCharacterCreate}) {
       return;
     }
 
+    const maxHP = 7 + Number(health);
+
     const characterData = {
-      name, 
-      health: Number(health),
-      skill: Number(skill),
-      magic: Number(magic)
+      name,
+      healthStat: Number(health),
+      skillStat: Number(skill),
+      magicStat: Number(magic),
+      maxHP,
+      currentHP: maxHP,
     };
 
     onCharacterCreate(characterData);

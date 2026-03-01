@@ -22,9 +22,37 @@ export function Game({ role, character, selectedGame }) {
     }
   }, [messages]);
 
+  function getWeapon(skill) {
+    const weapons = [
+      { name: 'Punch', dice: 1 },
+      { name: 'Dagger', dice: 2 },
+      { name: 'Longsword', dice: 3 },
+      { name: 'Halberd', dice: 4 },
+    ];
+    return weapons[skill] || weapons[0];
+  }
+
+  function getSpell(magic) {
+    const spells = [
+      null,
+      { name: 'Spark', dice: 1 },
+      { name: 'Fire Bolt', dice: 2 },
+      { name: 'Fireball', dice: 3 },
+    ];
+    return spells[magic];
+  }
+
+  function rollDice(diceCount) {
+    let total = 0;
+    for (let i = 0; i < diceCount; i++) {
+      total += Math.floor(Math.random() * 6) + 1;
+    }
+    return total;
+  }
+
   function handleSend(e) {
     e.preventDefault();
-    if (!input.trim) return;
+    if (!input.trim()) return;
 
     const senderName =
       role === 'gm'
@@ -59,9 +87,67 @@ export function Game({ role, character, selectedGame }) {
               {role === 'player' && character && (
                 <div className="party-member">
                   <strong>{character.name}</strong>
-                  <div>Health: {character.health}</div>
-                  <div>Skill: {character.skill}</div>
-                  <div>Magic: {character.magic}</div>
+                  <div>
+                    HP: {character.currentHP} / {character.maxHP}
+                  </div>
+                  <div>
+                    Skill: {character.skillStat}
+                  </div>
+                  {(() => {
+                    const weapon = getWeapon(character.skillStat);
+                    return (
+                      <div>
+                        ⚔ Attack: {weapon.name} ({weapon.dice}d6)
+                        <button
+                          type="submit"
+                          name="action"
+                          value="first"
+                          onClick={() => {
+                            const damage = rollDice(weapon.dice);
+                            setMessages(prev => [
+                              ...prev,
+                              {
+                                sender: character.name,
+                                text: `${weapon.name} deals ${weapon.dice}d6 → ${damage} damage!`
+                              }
+                            ]);
+                          }}
+                        >
+                          Use
+                        </button>
+                      </div>
+                    );
+                  })()}
+
+                  <div>
+                    Magic: {character.magicStat}
+                  </div>
+
+                  {character.magicStat > 0 && (() => {
+                    const spell = getSpell(character.magicStat);
+                    return (
+                      <div>
+                        🔮 Spell: {spell.name} ({spell.dice}d6)
+                        <button
+                          type="submit"
+                          name="action"
+                          value="first"
+                          onClick={() => {
+                            const damage = rollDice(spell.dice);
+                            setMessages(prev => [
+                              ...prev,
+                              {
+                                sender: character.name,
+                                text: `${spell.name} deals ${spell.dice}d6 → ${damage} damage!`
+                              }
+                            ]);
+                          }}
+                        >
+                          Cast
+                        </button>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 
