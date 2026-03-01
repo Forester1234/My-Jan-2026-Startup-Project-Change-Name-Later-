@@ -3,6 +3,12 @@ import './game.css';
 import forestMap from '../../images/forest-map.png';
 
 export function Game({ role, character, selectedGame }) {
+  const [spellUses, setSpellUses] = React.useState(
+    character?.magicStat || 0
+  );
+  const [selectedTarget, setSelectedTarget] = React.useState('');
+  const [selectedSpellTargets, setSelectedSpellTargets] = React.useState([]);
+
   const [messages, setMessages] = React.useState([]);
   const [input, setInput] = React.useState('');
   const chatRef = React.useRef(null);
@@ -13,6 +19,29 @@ export function Game({ role, character, selectedGame }) {
   const [monsterName, setMonsterName] = React.useState('');
   const [monsterHP, setMonsterHP] = React.useState('');
   const [monsterAttack, setMonsterAttack] = React.useState('');
+
+  React.useEffect(() => {
+    if (monsters.length === 0) {
+      setMonsters([
+        {
+          name: 'Training Dummy 1',
+          hp: 20,
+          attack: '0d6',
+        },
+        {
+          name: 'Training Dummy 2',
+          hp: 20,
+          attack: '0d6',
+        }
+      ]);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (character?.magicStat) {
+      setSpellUses(character.magicStat);
+    }
+  }, [character]);
 
   React.useEffect(() => {
     if (chatRef.current) {
@@ -35,9 +64,9 @@ export function Game({ role, character, selectedGame }) {
   function getSpell(magic) {
     const spells = [
       null,
-      { name: 'Spark', dice: 1 },
-      { name: 'Fire Bolt', dice: 2 },
-      { name: 'Fireball', dice: 3 },
+      { name: 'Spark', dice: 2 },
+      { name: 'Fire Bolt', dice: 3 },
+      { name: 'Fireball', dice: 4 },
     ];
     return spells[magic];
   }
@@ -48,6 +77,33 @@ export function Game({ role, character, selectedGame }) {
       total += Math.floor(Math.random() * 6) + 1;
     }
     return total;
+  }
+
+  function applyDamageToMonster(index, damage) {
+    let targetName = '';
+    let died = false;
+
+    setMonsters(prev =>
+      prev
+        .map((monster, i) => {
+          if (i !== index) return monster;
+
+          targetName = monster.name;
+
+          const newHP = monster.hp - damage;
+          if (newHP <= 0) {
+            died = true;
+          }
+
+          return {
+            ...monster,
+            hp: newHP,
+          };
+        })
+        .filter(monster => monster.hp > 0)
+    );
+
+    return { targetName, died };
   }
 
   function handleSend(e) {
@@ -95,26 +151,58 @@ export function Game({ role, character, selectedGame }) {
                   </div>
                   {(() => {
                     const weapon = getWeapon(character.skillStat);
+
                     return (
                       <div>
                         ⚔ Attack: {weapon.name} ({weapon.dice}d6)
-                        <button
-                          type="submit"
-                          name="action"
-                          value="first"
-                          onClick={() => {
-                            const damage = rollDice(weapon.dice);
-                            setMessages(prev => [
-                              ...prev,
-                              {
-                                sender: character.name,
-                                text: `${weapon.name} deals ${weapon.dice}d6 → ${damage} damage!`
-                              }
-                            ]);
-                          }}
-                        >
-                          Use
-                        </button>
+
+                        {monsters.length > 0 && (
+                          <>
+                            <select
+                              className="form-select form-select-sm my-1"
+                              value={selectedTarget}
+                              onChange={(e) => setSelectedTarget(e.target.value)}
+                            >
+                              <option value="">Choose target</option>
+                              {monsters.map((m, i) => (
+                                <option key={i} value={i}>
+                                  {m.name} (HP: {m.hp})
+                                </option>
+                              ))}
+                            </select>
+
+                            <button
+                              type="submit"
+                              name="action"
+                              value="first"
+                              disabled={selectedTarget === ''}
+                              onClick={() => {
+                                const damage = rollDice(weapon.dice);
+                                const targetIndex = Number(selectedTarget);
+
+                                const { targetName, died } = applyDamageToMonster(targetIndex, damage);
+
+                                setMessages(prev => [
+                                  ...prev,
+                                  {
+                                    sender: character.name,
+                                    text: `${weapon.name} hits ${targetName} for ${damage} damage!`
+                                  },
+                                  ...(died
+                                    ? [{
+                                        sender: 'System',
+                                        text: `${targetName} has been slain!`
+                                      }]
+                                    : [])
+                                ]);
+
+                                setSelectedTarget('');
+                              }}
+                            >
+                              Use
+                            </button>
+                          </>
+                        )}
                       </div>
                     );
                   })()}
@@ -125,26 +213,77 @@ export function Game({ role, character, selectedGame }) {
 
                   {character.magicStat > 0 && (() => {
                     const spell = getSpell(character.magicStat);
+
                     return (
-                      <div>
+                      <div className="mt-2">
                         🔮 Spell: {spell.name} ({spell.dice}d6)
-                        <button
-                          type="submit"
-                          name="action"
-                          value="first"
-                          onClick={() => {
-                            const damage = rollDice(spell.dice);
-                            setMessages(prev => [
-                              ...prev,
-                              {
-                                sender: character.name,
-                                text: `${spell.name} deals ${spell.dice}d6 → ${damage} damage!`
+                        <span className="ms-2">
+                          Uses: {spellUses} / {character.magicStat}
+                        </span>
+
+                        {monsters.length > 0 && (
+                          <>
+                            <select
+                              multiple
+                              className="form-select form-select-sm my-1"
+                              value={selectedSpellTargets}
+                              onChange={(e) => {
+                                const values = Array.from(
+                                  e.target.selectedOptions,
+                                  option => option.value
+                                );
+
+                                if (values.length <= 2) {
+                                  setSelectedSpellTargets(values);
+                                }
+                              }}
+                            >
+                              {monsters.map((m, i) => (
+                                <option key={i} value={i}>
+                                  {m.name} (HP: {m.hp})
+                                </option>
+                              ))}
+                            </select>
+
+                            <button
+                              type="submit"
+                              name="action"
+                              value="first"
+                              disabled={
+                                spellUses <= 0 || selectedSpellTargets.length === 0
                               }
-                            ]);
-                          }}
-                        >
-                          Cast
-                        </button>
+                              onClick={() => {
+                                setSpellUses(prev => prev - 1);
+
+                                const newMessages = [];
+
+                                selectedSpellTargets.forEach(index => {
+                                  const damage = rollDice(spell.dice);
+
+                                  const { targetName, died } = applyDamageToMonster(Number(index), damage);
+
+                                  newMessages.push({
+                                    sender: character.name,
+                                    text: `${spell.name} hits ${targetName} for ${damage} damage!`
+                                  });
+
+                                  if (died) {
+                                    newMessages.push({
+                                      sender: 'System',
+                                      text: `${targetName} has been incinerated!`
+                                    });
+                                  }
+                                });
+
+                                setMessages(prev => [...prev, ...newMessages]);
+
+                                setSelectedSpellTargets([]);
+                              }}
+                            >
+                              Cast
+                            </button>
+                          </>
+                        )}
                       </div>
                     );
                   })()}
