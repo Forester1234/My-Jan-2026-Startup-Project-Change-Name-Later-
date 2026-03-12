@@ -27,6 +27,42 @@
 
 .party-member ul ul { margin-top:0.25rem; padding-left:1rem; }
 
+.spell-targets input[type="checkbox"] {
+  display: none;
+}
+
+.spell-targets label {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  user-select: none;
+  color: #2b1f0f;
+}
+
+.spell-targets label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #6b4a2a;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.spell-targets input[type="checkbox"]:checked + span::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 7px;
+  width: 6px;
+  height: 12px;
+  border: solid #ffb703;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 .chat-box {
   height: 300px;
   overflow-y: auto;
