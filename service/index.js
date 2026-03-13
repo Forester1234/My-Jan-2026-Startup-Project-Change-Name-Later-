@@ -1,20 +1,30 @@
-const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
+const express = require('express');
 const uuid = require('uuid');
-
 const app = express();
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
-
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.static('public'));
 
 const authCookieName = 'token';
 
-// In-memory database
-const users = [];
-const items = [];
+// The users are saved in memory and disappear whenever the service is restarted.
+let users = [];
+// Fill in new saved elements
+
+// The service port. In production the front-end code is statically hosted by the service on the same port.
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
+
+// JSON body parsing using built-in middleware
+app.use(express.json());
+
+// Use the cookie parser middleware for tracking authentication tokens
+app.use(cookieParser());
+
+// Serve up the front-end static content hosting
+app.use(express.static('public'));
+
+// Router for service endpoints
+var apiRouter = express.Router();
+app.use(`/api`, apiRouter);
 
 // CreateAuth a new user
 apiRouter.post('/auth/create', async (req, res) => {
@@ -61,6 +71,75 @@ const verifyAuth = async (req, res, next) => {
     res.status(401).send({ msg: 'Unauthorized' });
   }
 };
+
+// Fill in new endpoints
+
+
+
+
+
+
+
+// Default error handler
+app.use(function (err, req, res, next) {
+  res.status(500).send({ type: err.name, message: err.message });
+});
+
+// Return the application's default page if the path is unknown
+app.use((_req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
+// updateScores considers a new score for inclusion in the high scores.
+function updateScores(newScore) {
+  let found = false;
+  for (const [i, prevScore] of scores.entries()) {
+    if (newScore.score > prevScore.score) {
+      scores.splice(i, 0, newScore);
+      found = true;
+      break;
+    }
+  }
+
+  if (!found) {
+    scores.push(newScore);
+  }
+
+  if (scores.length > 10) {
+    scores.length = 10;
+  }
+
+  return scores;
+}
+
+async function createUser(email, password) {
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  const user = {
+    email: email,
+    password: passwordHash,
+    token: uuid.v4(),
+  };
+  users.push(user);
+
+  return user;
+}
+
+async function findUser(field, value) {
+  if (!value) return null;
+
+  return users.find((u) => u[field] === value);
+}
+
+// setAuthCookie in the HTTP response
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    maxAge: 1000 * 60 * 60 * 24 * 365,
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+}
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
