@@ -74,15 +74,49 @@ const verifyAuth = async (req, res, next) => {
 };
 
 apiRouter.post('/game', verifyAuth, (req, res) => {
+  const gmName = req.body.player;
+
   const game = {
     id: uuid.v4(),
-    player: req.body.player,
-    character: req.body.character,
     name: req.body.name,
+    gm: gmName,
+    players: [],
     created: new Date(),
   };
 
   games.push(game);
+
+  res.send(game);
+});
+
+apiRouter.post('/game/join', verifyAuth, (req, res) => {
+  const game = games.find((g) => g.name === req.body.name);
+
+  if (!game) {
+    return res.status(404).send({ msg: 'Game not found' });
+  }
+
+  const playerName = req.body.player;
+  if (game.gm === playerName) {
+    return res.status(403).send({ msg: 'GM cannot join as a player' });
+  }
+
+  const existingPlayer = game.players.find(
+    (p) => p.playerName === playerName
+  );
+
+  if (existingPlayer) {
+    return res.status(409).send({ msg: 'Player already joined' });
+  }
+
+  const player = {
+    playerName: req.body.player,
+    role: 'player',
+    character: req.body.character,
+  };
+
+  game.players.push(player);
+
   res.send(game);
 });
 

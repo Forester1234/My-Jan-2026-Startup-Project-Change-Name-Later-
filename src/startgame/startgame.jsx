@@ -19,11 +19,13 @@ export function StartGame({ onGameSelect, setRole, character }) {
         await fetch('/api/game', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(gameData),
+          body: JSON.stringify({
+            name: adventure,
+            player: localStorage.getItem('userName'),
+          }),
         });
-
+        
         localStorage.setItem('gameName', adventure);
-
         setRole('gm');
         navigate('/game');
       }
@@ -37,6 +39,7 @@ export function StartGame({ onGameSelect, setRole, character }) {
           const game = games.find((g) => g.name === adventure);
 
           if (game) {
+            localStorage.setItem('gameName', adventure);
             setRole('player');
 
             if (character) {

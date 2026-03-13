@@ -10,7 +10,7 @@ export function Character({onCharacterCreate}) {
   const [magic, setMagic] = React.useState(0);
   const [error, setError] = React.useState(null);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     setError(null);
 
     const total = Number(health) + Number(skill) + Number(magic);
@@ -35,9 +35,33 @@ export function Character({onCharacterCreate}) {
       maxHP,
       currentHP: maxHP,
     };
+    try {
+      const response = await fetch('/api/game/join', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          name: localStorage.getItem('gameName'),
+          player: localStorage.getItem('userName'),
+          character: characterData,
+        }),
+      });
 
-    onCharacterCreate(characterData);
-    navigate('/game');
+      if (response.status === 409) {
+        setError('You have already joined this game.');
+        return;
+      }
+
+      if (response.status === 403) {
+        setError('The GM cannot join as a player.');
+        return;
+      }
+
+      onCharacterCreate(characterData);
+      navigate('/game');
+    }
+    catch (err) {
+      console.error(err);
+    }
   }
 
   const total = health + skill + magic;
