@@ -433,7 +433,7 @@ export function Game({ role, character, selectedGame }) {
                         }
                       }}
                     >
-                      Generate
+                      Random
                     </button>
                   </div>
                   <div className="col-4">

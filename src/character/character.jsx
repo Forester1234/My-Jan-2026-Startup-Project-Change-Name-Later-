@@ -87,7 +87,24 @@ export function Character({onCharacterCreate}) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter character name"
-              />
+              /> 
+              <button
+                type="button"
+                name="action"
+                value="second"
+                onClick={async () => {
+                  try {
+                    const res = await fetch('https://namefake.com/fantasy-fake-name-generator');
+                    const data = await res.json();
+                    setMonsterName(data.name);
+                  } catch (err) {
+                    console.error(err);
+                    alert('Could not fetch a fantasy name.');
+                  }
+                }}
+              >
+                Random
+              </button>
             </div>
 
             <p>Points remaining: <strong>{remaining}</strong></p>
