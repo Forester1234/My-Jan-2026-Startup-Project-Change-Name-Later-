@@ -13,8 +13,22 @@ export function Unauthenticated(props) {
       setDisplayError('Please enter a name and password.');
       return;
     }
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email: userName, password: password }),
+      });
+
+      if (response.ok) {
+        localStorage.setItem('userName', userName);
+        props.onLogin(userName);
+      } else {
+        setDisplayError('Login failed');
+      }
+    } catch {
+      setDisplayError('Login error');
+    }
   }
 
   async function createUser() {
@@ -22,8 +36,22 @@ export function Unauthenticated(props) {
       setDisplayError('Please enter a name and password.');
       return;
     }
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    try {
+      const response = await fetch('/api/auth/create', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email: userName, password: password }),
+      });
+
+      if (response.ok) {
+        localStorage.setItem('userName', userName);
+        props.onLogin(userName);
+      } else {
+        setDisplayError('Create account failed');
+      }
+    } catch {
+      setDisplayError('Error creating account');
+    }
   }
 
   return (

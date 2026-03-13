@@ -8,6 +8,7 @@ const authCookieName = 'token';
 
 // The users are saved in memory and disappear whenever the service is restarted.
 let users = [];
+let games = [];
 // Fill in new saved elements
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
@@ -73,7 +74,6 @@ const verifyAuth = async (req, res, next) => {
 };
 
 // Fill in new endpoints
-
 
 
 
