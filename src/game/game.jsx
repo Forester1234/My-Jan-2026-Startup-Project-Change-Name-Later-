@@ -18,9 +18,7 @@ import forestMap from '../../images/forest-map.png';
 
 export function Game({ role, character, selectedGame }) {
   const [players, setPlayers] = React.useState(defaultPlayers);
-  const [spellUses, setSpellUses] = React.useState(
-    character?.magicStat || 0
-  );
+  const [spellUses, setSpellUses] = React.useState(character?.magicStat || 0);
   const [selectedTarget, setSelectedTarget] = React.useState('');
   const [selectedSpellTargets, setSelectedSpellTargets] = React.useState([]);
 
@@ -36,6 +34,48 @@ export function Game({ role, character, selectedGame }) {
   const [monsterName, setMonsterName] = React.useState('');
   const [monsterHP, setMonsterHP] = React.useState('');
   const [monsterAttack, setMonsterAttack] = React.useState('');
+
+  React.useEffect(() => {
+    async function fetchGameState() {
+      if (!selectedGame?.name) return;
+      const response = await fetch(`/api/game/state/${selectedGame.name}`);
+      if (response.ok) {
+        const state = await response.json();
+        setPlayers(state.players || []);
+        setMonsters(state.monsters || []);
+        setMapImage(state.mapImage || forestMap);
+        setMessages(state.messages || []);
+      }
+    }
+
+    fetchGameState();
+  }, [selectedGame]);
+
+  React.useEffect(() => {
+    if (!selectedGame?.name) return;
+    const timeout = setTimeout(() => {
+      fetch('/api/game/state', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          name: selectedGame.name,
+          players,
+          monsters,
+          mapImage,
+          messages: messages.slice(-20)
+        })
+      });
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [players, monsters, mapImage, messages, selectedGame]);
+
+  React.useEffect(() => {
+    if (character?.magicStat) setSpellUses(character.magicStat);
+  }, [character]);
+
+  React.useEffect(() => {
+    chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' });
+  }, [messages]);
 
   function getWeapon(skill) {
     const weapons = [
@@ -84,16 +124,16 @@ export function Game({ role, character, selectedGame }) {
     setMonsters(prev =>
       prev
         .map((m, i) =>
-        i === index ? { ...m, hp: newHP } : m
-      )
-      .filter(m => m.hp > 0)
+          i === index ? { ...m, hp: Math.max(0, m.hp - damage) } : m
+        )
+        .filter(m => m.hp > 0)
     );
 
     return { targetName: monster.name, died };
   }
 
   function addMessage(sender, text) {
-    setMessages(prev => [...prev, { sender, text }]);
+    setMessages(prev => [...prev.slice(-19), { sender, text }]);
   }
 
   function handlePlayerAttack(weapon) {
@@ -149,7 +189,7 @@ export function Game({ role, character, selectedGame }) {
 
     setPlayers(prev =>
       prev.map((p, i) =>
-        i === targetIndex ? { ...p, currentHP: newHP } : p
+        i === targetIndex ? { ...p, currentHP: Math.max(0, p.currentHP - damage) } : p
       )
     );
 
@@ -183,19 +223,6 @@ export function Game({ role, character, selectedGame }) {
     setMessages((prev) => [...prev, newMessage]);
     setInput('');
   }
-
-  React.useEffect(() => {
-    if (character?.magicStat) {
-      setSpellUses(character.magicStat);
-    }
-  }, [character]);
-
-  React.useEffect(() => {
-    chatRef.current?.scrollTo({
-      top: chatRef.current.scrollHeight,
-      behavior: "smooth"
-    });
-  }, [messages]);
 
   const weapon = character ? getWeapon(character.skillStat) : null;
   const spell = character ? getSpell(character.magicStat) : null;

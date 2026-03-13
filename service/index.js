@@ -81,6 +81,9 @@ apiRouter.post('/game', verifyAuth, (req, res) => {
     name: req.body.name,
     gm: gmName,
     players: [],
+    monsters: [],
+    mapImage: forestMap,
+    messages: [],
     created: new Date(),
   };
 
@@ -118,6 +121,32 @@ apiRouter.post('/game/join', verifyAuth, (req, res) => {
   game.players.push(player);
 
   res.send(game);
+});
+
+apiRouter.post('/game/state', verifyAuth, (req, res) => {
+  const { name, players, monsters, mapImage, messages } = req.body;
+
+  const game = games.find(g => g.name === name);
+  if (!game) return res.status(404).send({ msg: 'Game not found' });
+
+  if (players) game.players = players;
+  if (monsters) game.monsters = monsters;
+  if (mapImage) game.mapImage = mapImage;
+  if (messages) game.messages = messages.slice(-20);
+
+  res.send(game);
+});
+
+apiRouter.get('/game/state/:name', verifyAuth, (req, res) => {
+  const game = games.find(g => g.name === req.params.name);
+  if (!game) return res.status(404).send({ msg: 'Game not found' });
+
+  res.send({
+    players: game.players,
+    monsters: game.monsters,
+    mapImage: game.mapImage,
+    messages: game.messages,
+  });
 });
 
 // Fill in new endpoints
