@@ -5,27 +5,53 @@ export function StartGame({ onGameSelect, setRole, character }) {
   const navigate = useNavigate();
   const [adventure, setAdventure] = React.useState('');
 
-  function handleAction(type){
+  async function handleAction(type){
     if (!adventure) return;
 
     const gameData = {
+      player: localStorage.getItem('userName'),
+      character: character,
       name: adventure,
     };
 
-    onGameSelect(gameData);
+    try {
+      if (type === 'create') {
+        await fetch('/api/game', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(gameData),
+        });
 
-    if (type === 'join') {
-      setRole('player');
+        localStorage.setItem('gameName', adventure);
 
-      if (character) {
+        setRole('gm');
         navigate('/game');
-      } else {
-        navigate('/character');
       }
 
-    } else if (type === 'create') {
-      setRole('gm');
-      navigate('/game');
+      if (type === 'join') {
+        const response = await fetch('/api/games');
+
+        if (response.ok) {
+          const games = await response.json();
+
+          const game = games.find((g) => g.name === adventure);
+
+          if (game) {
+            setRole('player');
+
+            if (character) {
+              navigate('/game');
+            } else {
+              navigate('/character');
+            }
+          } else {
+            alert('Game not found');
+          }
+        }
+      }
+    }
+    catch (err) {
+      console.error(err);
     }
   }
 

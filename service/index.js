@@ -73,10 +73,24 @@ const verifyAuth = async (req, res, next) => {
   }
 };
 
+apiRouter.post('/game', verifyAuth, (req, res) => {
+  const game = {
+    id: uuid.v4(),
+    player: req.body.player,
+    character: req.body.character,
+    name: req.body.name,
+    created: new Date(),
+  };
+
+  games.push(game);
+  res.send(game);
+});
+
 // Fill in new endpoints
 
-
-
+apiRouter.get('/games', verifyAuth, (_req, res) => {
+  res.send(games);
+});
 
 
 
@@ -89,28 +103,6 @@ app.use(function (err, req, res, next) {
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
-
-// updateScores considers a new score for inclusion in the high scores.
-function updateScores(newScore) {
-  let found = false;
-  for (const [i, prevScore] of scores.entries()) {
-    if (newScore.score > prevScore.score) {
-      scores.splice(i, 0, newScore);
-      found = true;
-      break;
-    }
-  }
-
-  if (!found) {
-    scores.push(newScore);
-  }
-
-  if (scores.length > 10) {
-    scores.length = 10;
-  }
-
-  return scores;
-}
 
 async function createUser(email, password) {
   const passwordHash = await bcrypt.hash(password, 10);
