@@ -418,6 +418,23 @@ export function Game({ role, character, selectedGame }) {
                       onChange={(e) => setMonsterName(e.target.value)}
                       placeholder="Monster Name"
                     />
+                    <button
+                      type="button"
+                      name="action"
+                      value="second"
+                      onClick={async () => {
+                        try {
+                          const res = await fetch('https://namefake.com/fantasy-fake-name-generator');
+                          const data = await res.json();
+                          setMonsterName(data.name);
+                        } catch (err) {
+                          console.error(err);
+                          alert('Could not fetch a fantasy name.');
+                        }
+                      }}
+                    >
+                      Generate
+                    </button>
                   </div>
                   <div className="col-4">
                     <label className="form-label">HP</label>
