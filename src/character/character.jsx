@@ -38,6 +38,7 @@ export function Character({onCharacterCreate}) {
     try {
       const response = await fetch('/api/game/join', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           name: localStorage.getItem('gameName'),
@@ -94,9 +95,9 @@ export function Character({onCharacterCreate}) {
                 value="second"
                 onClick={async () => {
                   try {
-                    const res = await fetch('https://namefake.com/fantasy-fake-name-generator');
+                    const res = await fetch('https://www.fantasynamegenerators.com/api/fantasy-names');
                     const data = await res.json();
-                    setMonsterName(data.name);
+                    setName(data.name.split(' ')[0]);
                   } catch (err) {
                     console.error(err);
                     alert('Could not fetch a fantasy name.');
@@ -120,7 +121,7 @@ export function Character({onCharacterCreate}) {
                   min="0"
                   max="3"
                   value={health}
-                  onChange={(e) => setHealth(Number(e.target.value))}
+                  onChange={(e) => setHealth(Number(Math.min(3, Math.max(0, Number(e.target.value)))))}
                 />
               </div>
               <div className="form-text">
@@ -139,7 +140,7 @@ export function Character({onCharacterCreate}) {
                   min="0"
                   max="3"
                   value={skill}
-                  onChange={(e) => setSkill(Number(e.target.value))}
+                  onChange={(e) => setSkill(Number(Math.min(3, Math.max(0, Number(e.target.value)))))}
                 />
               </div>
               <div className="form-text">
@@ -158,7 +159,7 @@ export function Character({onCharacterCreate}) {
                   min="0"
                   max="3"
                   value={magic}
-                  onChange={(e) => setMagic(Number(e.target.value))}
+                  onChange={(e) => setMagic(Number(Math.min(3, Math.max(0, Number(e.target.value)))))}
                 />
               </div>
               <div className="form-text">

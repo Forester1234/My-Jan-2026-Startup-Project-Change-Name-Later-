@@ -82,7 +82,7 @@ apiRouter.post('/game', verifyAuth, (req, res) => {
     gm: gmName,
     players: [],
     monsters: [],
-    mapImage: forestMap,
+    mapImage: '../images/forestMap',
     messages: [],
     created: new Date(),
   };
@@ -190,7 +190,7 @@ async function findUser(field, value) {
 function setAuthCookie(res, authToken) {
   res.cookie(authCookieName, authToken, {
     maxAge: 1000 * 60 * 60 * 24 * 365,
-    secure: true,
+    secure: false,
     httpOnly: true,
     sameSite: 'strict',
   });

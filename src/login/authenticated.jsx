@@ -8,6 +8,7 @@ export function Authenticated(props) {
   async function logout() {
     await fetch('/api/auth/logout', {
       method: 'DELETE',
+      credentials: 'include'
     });
 
     localStorage.removeItem('userName');

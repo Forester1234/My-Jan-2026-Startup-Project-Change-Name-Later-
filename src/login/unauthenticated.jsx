@@ -16,8 +16,9 @@ export function Unauthenticated(props) {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email: userName, password: password }),
+        headers: { 'content-type': 'application/json' },
       });
 
       if (response.ok) {
@@ -39,6 +40,7 @@ export function Unauthenticated(props) {
     try {
       const response = await fetch('/api/auth/create', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ email: userName, password: password }),
       });

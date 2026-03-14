@@ -18,45 +18,41 @@ export function StartGame({ onGameSelect, setRole, character }) {
       if (type === 'create') {
         await fetch('/api/game', {
           method: 'POST',
+          credentials: 'include',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            name: adventure,
-            player: localStorage.getItem('userName'),
-          }),
+          body: JSON.stringify(gameData),
         });
-        
-        localStorage.setItem('gameName', adventure);
-        setRole('gm');
-        navigate('/game');
+
+        if (response.ok) {
+          localStorage.setItem('gameName', adventure);
+          setRole('gm');
+          navigate('/game');
+        }
       }
 
       if (type === 'join') {
-        const response = await fetch('/api/games');
+        const response = await fetch('/api/game/join', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(gameData),
+        });
 
         if (response.ok) {
-          const games = await response.json();
+          localStorage.setItem('gameName', adventure);
+          setRole('player');
 
-          const game = games.find((g) => g.name === adventure);
-
-          if (game) {
-            localStorage.setItem('gameName', adventure);
-            setRole('player');
-
-            if (character) {
-              navigate('/game');
-            } else {
-              navigate('/character');
-            }
+          if (character) {
+            navigate('/game');
           } else {
-            alert('Game not found');
+            navigate('/character');
           }
         }
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
-    }
   }
+}
 
   return (
     <main>

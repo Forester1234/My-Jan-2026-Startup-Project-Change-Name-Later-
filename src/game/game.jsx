@@ -38,7 +38,9 @@ export function Game({ role, character, selectedGame }) {
   React.useEffect(() => {
     async function fetchGameState() {
       if (!selectedGame?.name) return;
-      const response = await fetch(`/api/game/state/${selectedGame.name}`);
+      const response = await fetch(`/api/game/state/${selectedGame.name}`, {
+        credentials: 'include',
+      });
       if (response.ok) {
         const state = await response.json();
         setPlayers(state.players || []);
@@ -56,6 +58,7 @@ export function Game({ role, character, selectedGame }) {
     const timeout = setTimeout(() => {
       fetch('/api/game/state', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           name: selectedGame.name,
@@ -65,9 +68,28 @@ export function Game({ role, character, selectedGame }) {
           messages: messages.slice(-20)
         })
       });
-    }, 500);
+    }, 2000);
     return () => clearTimeout(timeout);
   }, [players, monsters, mapImage, messages, selectedGame]);
+
+  React.useEffect(() => {
+    if (!selectedGame?.name) return;
+
+    const interval = setInterval(async () => {
+      const response = await fetch(`/api/game/state/${selectedGame.name}`, {
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const state = await response.json();
+        setPlayers(state.players || []);
+        setMonsters(state.monsters || []);
+        setMessages(state.messages || []);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [selectedGame]);
 
   React.useEffect(() => {
     if (character?.magicStat) setSpellUses(character.magicStat);
@@ -244,10 +266,10 @@ export function Game({ role, character, selectedGame }) {
 
               {role === 'gm' && players.map((p, i) => (
                 <div key={i} className="party-member">
-                  <strong>{p.name} (Test)</strong>
-                  <div>HP: {p.currentHP} / {p.maxHP}</div>
-                  <div>Skill: {p.skillStat}</div>
-                  <div>Magic: {p.magicStat}</div>
+                  <strong>{p.character?.name || p.playerName}</strong>
+                  <div>HP: {p.character.currentHP} / {p.character.maxHP}</div>
+                  <div>Skill: {p.character.skillStat}</div>
+                  <div>Magic: {p.character.magicStat}</div>
                 </div>
               ))}
               
@@ -282,7 +304,7 @@ export function Game({ role, character, selectedGame }) {
                           <button
                             name="action"
                             value="first"
-                            disabled={selectedTarget === ''}
+                            disabled={!selectedTarget}
                             onClick={() => handlePlayerAttack(weapon)}
                           >
                             Use
@@ -424,9 +446,9 @@ export function Game({ role, character, selectedGame }) {
                       value="second"
                       onClick={async () => {
                         try {
-                          const res = await fetch('https://namefake.com/fantasy-fake-name-generator');
+                          const res = await fetch('https://www.fantasynamegenerators.com/api/fantasy-names');
                           const data = await res.json();
-                          setMonsterName(data.name);
+                          setMonsterName(data.name.split(' ')[0]);
                         } catch (err) {
                           console.error(err);
                           alert('Could not fetch a fantasy name.');
@@ -520,7 +542,7 @@ export function Game({ role, character, selectedGame }) {
                   >
                     <option value="">Choose player</option>
                     {players.map((p, i) => (
-                      <option key={i} value={i}>{p.name}</option>
+                      <option key={i} value={i}>{p.character?.name || p.playerName}</option>
                     ))}
                   </select>
 
@@ -529,7 +551,7 @@ export function Game({ role, character, selectedGame }) {
                     name="action"
                     value="first"
                     onClick={handleMonsterAttack}
-                    disabled={!selectedTarget || selectedMonster === ''}
+                    disabled={selectedTarget === '' || selectedMonster === ''}
                   >
                     Attack Player
                   </button>
