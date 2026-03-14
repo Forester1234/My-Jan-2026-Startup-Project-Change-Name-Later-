@@ -246,6 +246,20 @@ export function Game({ role, character, selectedGame }) {
     setInput('');
   }
 
+  async function getRandomMonsterName() {
+    try {
+      const res = await fetch('https://api.open5e.com/monsters/');
+      const data = await res.json();
+      const monsters = data.results;
+      const randomMonster = monsters[Math.floor(Math.random() * monsters.length)];
+      setMonsterName(randomMonster.name);
+    } catch (err) {
+      console.error(err);
+      alert('Could not fetch monster name');
+    }
+  }
+
+
   const weapon = character ? getWeapon(character.skillStat) : null;
   const spell = character ? getSpell(character.magicStat) : null;
 
@@ -449,16 +463,7 @@ export function Game({ role, character, selectedGame }) {
                       type="button"
                       name="action"
                       value="second"
-                      onClick={async () => {
-                        try {
-                          const res = await fetch('https://www.fantasynamegenerators.com/api/fantasy-names');
-                          const data = await res.json();
-                          setMonsterName(data.name.split(' ')[0]);
-                        } catch (err) {
-                          console.error(err);
-                          alert('Could not fetch a fantasy name.');
-                        }
-                      }}
+                      onClick={getRandomMonsterName}
                     >
                       Random
                     </button>
