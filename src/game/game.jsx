@@ -2,22 +2,8 @@ import React from 'react';
 import './game.css';
 import forestMap from '/forest-map.png';
 
-  const defaultPlayers = [
-    {
-      name: 'Test Player',
-      currentHP: 20,
-      maxHP: 20,
-      skillStat: 2,
-      magicStat: 1
-    }
-  ];
-  const defaultMonsters = [
-    { name: 'Training Dummy 1', hp: 20, attack: '0d6' },
-    { name: 'Training Dummy 2', hp: 20, attack: '0d6' }
-  ];
-
 export function Game({ role, character, selectedGame }) {
-  const [players, setPlayers] = React.useState(defaultPlayers);
+  const [players, setPlayers] = React.useState([]);
   const [spellUses, setSpellUses] = React.useState(character?.magicStat || 0);
   const [selectedTarget, setSelectedTarget] = React.useState('');
   const [selectedSpellTargets, setSelectedSpellTargets] = React.useState([]);
@@ -30,15 +16,17 @@ export function Game({ role, character, selectedGame }) {
   const [mapImage, setMapImage] = React.useState(forestMap);
   const [mapInput, setMapInput] = React.useState('');
 
-  const [monsters, setMonsters] = React.useState(defaultMonsters);
+  const [monsters, setMonsters] = React.useState([]);
   const [monsterName, setMonsterName] = React.useState('');
   const [monsterHP, setMonsterHP] = React.useState('');
   const [monsterAttack, setMonsterAttack] = React.useState('');
 
+  const [isFetched, setIsFetched] = React.useState(false);
+
   React.useEffect(() => {
     async function fetchGameState() {
-      if (!selectedGame?.name) return;
-      const response = await fetch(`/api/game/state/${selectedGame.name}`, {
+      if (!selectedGame) return;
+      const response = await fetch(`/api/game/state/${selectedGame}`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -48,26 +36,41 @@ export function Game({ role, character, selectedGame }) {
         setMapImage(state.mapImage || forestMap);
         setMessages(state.messages || []);
       }
+
+      setIsFetched(true);
     }
 
     fetchGameState();
   }, [selectedGame]);
 
   React.useEffect(() => {
-    if (!selectedGame?.name) return;
+    console.log(selectedGame);
+    //console.log(selectedGame.name);
+
+    console.log("Starting save");
+
+    if (!isFetched) return;
+
+    console.log("Autosave triggered");
+
     const timeout = setTimeout(() => {
+      console.log("Saving game:", selectedGame);
       fetch('/api/game/state', {
         method: 'POST',
         credentials: 'include',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          name: selectedGame.name,
-          players,
-          monsters,
-          mapImage,
+          name: selectedGame,
+          players: players,
+          monsters: monsters,
+          mapImage:mapImage,
           messages: messages.slice(-20)
         })
-      });
+      }).then(res => {
+      if (!res.ok) {
+        console.error("Save failed", res.status);
+      }
+    });
     }, 2000);
     return () => clearTimeout(timeout);
   }, [players, monsters, mapImage, messages, selectedGame]);
@@ -85,6 +88,7 @@ export function Game({ role, character, selectedGame }) {
         setPlayers(state.players || []);
         setMonsters(state.monsters || []);
         setMessages(state.messages || []);
+        setMapImage(state.mapImage || forestMap);
       }
     }, 3000);
 

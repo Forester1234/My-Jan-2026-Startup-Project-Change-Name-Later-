@@ -113,7 +113,7 @@ function App() {
                 role === 'gm' ||
                 (role === 'player' && character)
               )
-                ? <Game role={role} character={character} />
+                ? <Game role={role} character={character} selectedGame={selectedGame} />
                 : <StartGame onGameSelect={setSelectedGame} setRole={setRole} />
             }
           />

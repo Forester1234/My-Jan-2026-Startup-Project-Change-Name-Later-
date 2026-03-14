@@ -43,11 +43,12 @@ export function StartGame({ onGameSelect, setRole, character }) {
         });
 
         if (response.ok) {
+          const data = await response.json();
           localStorage.setItem('gameName', adventure);
-          setRole('player');
+          setRole(data.role);
           onGameSelect(adventure);
 
-          if (character) {
+          if (data.role === 'gm' || character) {
             navigate('/game');
           } else {
             navigate('/character');

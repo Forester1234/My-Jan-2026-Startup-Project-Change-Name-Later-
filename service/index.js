@@ -10,6 +10,27 @@ const authCookieName = 'token';
 let users = [];
 let games = [];
 // Fill in new saved elements
+const fs = require('fs');
+const path = require('path');
+
+const SAVE_DIR = path.join(__dirname, 'saved_games');
+fs.mkdirSync(SAVE_DIR, { recursive: true });
+
+fs.readdirSync(SAVE_DIR).forEach(file => {
+  if (file.endsWith('.json')) {
+    const data = fs.readFileSync(path.join(SAVE_DIR, file));
+    games.push(JSON.parse(data));
+  }
+});
+
+function saveGameToDisk(game) {
+  const filePath = path.join(SAVE_DIR, `${game.name}.json`);
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(game, null, 2));
+  } catch (err) {
+    console.error('Failed to save game:', err);
+  }
+}
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -82,12 +103,13 @@ apiRouter.post('/game', verifyAuth, (req, res) => {
     gm: gmName,
     players: [],
     monsters: [],
-    mapImage: '../images/forestMap',
+    mapImage: '/forest-map.png',
     messages: [],
     created: new Date(),
   };
 
   games.push(game);
+  saveGameToDisk(game);
 
   res.send(game);
 });
@@ -101,7 +123,7 @@ apiRouter.post('/game/join', verifyAuth, (req, res) => {
 
   const playerName = req.body.player;
   if (game.gm === playerName) {
-    return res.status(403).send({ msg: 'GM cannot join as a player' });
+    return res.send({ ...game, role: 'gm' });
   }
 
   const existingPlayer = game.players.find(
@@ -120,20 +142,28 @@ apiRouter.post('/game/join', verifyAuth, (req, res) => {
 
   game.players.push(player);
 
+  saveGameToDisk(game);
   res.send(game);
 });
 
 apiRouter.post('/game/state', verifyAuth, (req, res) => {
   const { name, players, monsters, mapImage, messages } = req.body;
 
+  console.log("STATE UPDATE:", req.body);
+
+
+  console.log(name);
+
   const game = games.find(g => g.name === name);
-  if (!game) return res.status(404).send({ msg: 'Game not found' });
+  console.log(games);
+  if (!game) return res.status(357).send({ msg: 'Game not found' });
 
   if (players) game.players = players;
   if (monsters) game.monsters = monsters;
   if (mapImage) game.mapImage = mapImage;
   if (messages) game.messages = messages.slice(-20);
 
+  saveGameToDisk(game);
   res.send(game);
 });
 

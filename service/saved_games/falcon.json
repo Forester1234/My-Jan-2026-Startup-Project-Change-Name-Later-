@@ -1,0 +1,16 @@
+{
+  "id": "ec4436f5-70a4-48c2-9cb0-e60f8222a097",
+  "name": "falcon",
+  "gm": "jim",
+  "players": [],
+  "monsters": [
+    {
+      "name": "dave",
+      "hp": 5,
+      "attack": "3d6"
+    }
+  ],
+  "mapImage": "/forest-map.png",
+  "messages": [],
+  "created": "2026-03-14T22:38:28.609Z"
+}
