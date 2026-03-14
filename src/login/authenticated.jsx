@@ -32,7 +32,7 @@ export function Authenticated(props) {
             type="button"
             name="action"
             value="second"
-            onClick={logout}
+            onClick={() => logout()}
           >
             Logout
           </Button>

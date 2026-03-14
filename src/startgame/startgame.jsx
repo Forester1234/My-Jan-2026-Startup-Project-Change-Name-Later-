@@ -6,7 +6,7 @@ export function StartGame({ onGameSelect, setRole, character }) {
   const [adventure, setAdventure] = React.useState('');
 
   async function handleAction(type){
-    if (!adventure) return;
+    if (!adventure.trim) return;
 
     const gameData = {
       player: localStorage.getItem('userName'),
@@ -16,7 +16,7 @@ export function StartGame({ onGameSelect, setRole, character }) {
 
     try {
       if (type === 'create') {
-        await fetch('/api/game', {
+        const response = await fetch('/api/game', {
           method: 'POST',
           credentials: 'include',
           headers: { 'content-type': 'application/json' },
@@ -26,7 +26,11 @@ export function StartGame({ onGameSelect, setRole, character }) {
         if (response.ok) {
           localStorage.setItem('gameName', adventure);
           setRole('gm');
+          onGameSelect(adventure);
           navigate('/game');
+        } else {
+          const text = await response.text();
+          console.error('Create failed:', text);
         }
       }
 
@@ -41,6 +45,7 @@ export function StartGame({ onGameSelect, setRole, character }) {
         if (response.ok) {
           localStorage.setItem('gameName', adventure);
           setRole('player');
+          onGameSelect(adventure);
 
           if (character) {
             navigate('/game');

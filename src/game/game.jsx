@@ -1,6 +1,6 @@
 import React from 'react';
 import './game.css';
-import forestMap from '../../images/forest-map.png';
+import forestMap from '/forest-map.png';
 
   const defaultPlayers = [
     {
@@ -266,10 +266,15 @@ export function Game({ role, character, selectedGame }) {
 
               {role === 'gm' && players.map((p, i) => (
                 <div key={i} className="party-member">
-                  <strong>{p.character?.name || p.playerName}</strong>
-                  <div>HP: {p.character.currentHP} / {p.character.maxHP}</div>
-                  <div>Skill: {p.character.skillStat}</div>
-                  <div>Magic: {p.character.magicStat}</div>
+                  {p.character ? (
+                    <>
+                      <div>HP: {p.character.currentHP} / {p.character.maxHP}</div>
+                      <div>Skill: {p.character.skillStat}</div>
+                      <div>Magic: {p.character.magicStat}</div>
+                    </>
+                  ) : (
+                    <div><em>No character yet</em></div>
+                  )}
                 </div>
               ))}
               

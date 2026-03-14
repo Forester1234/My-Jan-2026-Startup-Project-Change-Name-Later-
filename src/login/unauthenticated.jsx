@@ -25,10 +25,12 @@ export function Unauthenticated(props) {
         localStorage.setItem('userName', userName);
         props.onLogin(userName);
       } else {
-        setDisplayError('Login failed');
+        const body = await response.json();
+        setDisplayError(body.message || 'Login failed');
       }
     } catch {
-      setDisplayError('Login error');
+        const body = await response.json();
+        setDisplayError(body.message || 'Login error');
     }
   }
 
@@ -95,7 +97,7 @@ export function Unauthenticated(props) {
                   type="button"
                   name="action"
                   value="first"
-                  onClick={loginUser}
+                  onClick={() => loginUser()}
                   disabled={!userName || !password}
                 >
                   Login
@@ -104,7 +106,7 @@ export function Unauthenticated(props) {
                   type="button"
                   name="action"
                   value="second"
-                  onClick={createUser}
+                  onClick={() => createUser()}
                   disabled={!userName || !password}
                 >
                   Create
