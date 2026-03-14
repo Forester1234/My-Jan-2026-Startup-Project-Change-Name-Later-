@@ -2,7 +2,13 @@
   "id": "ec4436f5-70a4-48c2-9cb0-e60f8222a097",
   "name": "falcon",
   "gm": "jim",
-  "players": [],
+  "players": [
+    {
+      "playerName": "john",
+      "role": "player",
+      "character": null
+    }
+  ],
   "monsters": [
     {
       "name": "dave",

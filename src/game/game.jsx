@@ -45,16 +45,10 @@ export function Game({ role, character, selectedGame }) {
 
   React.useEffect(() => {
     console.log(selectedGame);
-    //console.log(selectedGame.name);
-
-    console.log("Starting save");
 
     if (!isFetched) return;
 
-    console.log("Autosave triggered");
-
     const timeout = setTimeout(() => {
-      console.log("Saving game:", selectedGame);
       fetch('/api/game/state', {
         method: 'POST',
         credentials: 'include',

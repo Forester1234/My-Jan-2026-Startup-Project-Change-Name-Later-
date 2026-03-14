@@ -149,14 +149,8 @@ apiRouter.post('/game/join', verifyAuth, (req, res) => {
 apiRouter.post('/game/state', verifyAuth, (req, res) => {
   const { name, players, monsters, mapImage, messages } = req.body;
 
-  console.log("STATE UPDATE:", req.body);
-
-
-  console.log(name);
-
   const game = games.find(g => g.name === name);
-  console.log(games);
-  if (!game) return res.status(357).send({ msg: 'Game not found' });
+  if (!game) return res.status(404).send({ msg: 'Game not found' });
 
   if (players) game.players = players;
   if (monsters) game.monsters = monsters;
