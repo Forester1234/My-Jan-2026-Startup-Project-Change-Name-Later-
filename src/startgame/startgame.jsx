@@ -6,7 +6,7 @@ export function StartGame({ onGameSelect, setRole, character }) {
   const [adventure, setAdventure] = React.useState('');
 
   async function handleAction(type){
-    if (!adventure.trim) return;
+    if (!adventure.trim()) return;
 
     const gameData = {
       player: localStorage.getItem('userName'),
@@ -44,11 +44,16 @@ export function StartGame({ onGameSelect, setRole, character }) {
 
         if (response.ok) {
           const data = await response.json();
+
           localStorage.setItem('gameName', adventure);
           setRole(data.role);
           onGameSelect(adventure);
 
-          if (data.role === 'gm' || character) {
+          if (data.role === 'gm') {
+            navigate('/game');
+            return;
+          }
+          if (data.character) {
             navigate('/game');
           } else {
             navigate('/character');

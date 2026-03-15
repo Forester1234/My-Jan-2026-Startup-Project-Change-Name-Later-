@@ -126,24 +126,41 @@ apiRouter.post('/game/join', verifyAuth, (req, res) => {
     return res.send({ ...game, role: 'gm' });
   }
 
+  let player = game.players.find(p => p.playerName === playerName);
+
   const existingPlayer = game.players.find(
     (p) => p.playerName === playerName
   );
 
-  if (existingPlayer) {
-    return res.status(409).send({ msg: 'Player already joined' });
+  if (player) {
+
+    if (req.body.character) {
+      player.character = req.body.character;
+      saveGameToDisk(game);
+    }
+
+    return res.send({
+      ...game,
+      role: 'player',
+      character: player.character
+    });
   }
 
-  const player = {
-    playerName: req.body.player,
+  player = {
+    playerName,
     role: 'player',
-    character: req.body.character,
+    character: req.body.character || null,
   };
 
   game.players.push(player);
 
   saveGameToDisk(game);
-  res.send(game);
+
+  res.send({
+    ...game,
+    role: 'player',
+    character: player.character
+  });
 });
 
 apiRouter.post('/game/state', verifyAuth, (req, res) => {

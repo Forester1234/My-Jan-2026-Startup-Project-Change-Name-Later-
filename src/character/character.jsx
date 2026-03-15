@@ -47,13 +47,8 @@ export function Character({onCharacterCreate}) {
         }),
       });
 
-      if (response.status === 409) {
-        setError('You have already joined this game.');
-        return;
-      }
-
       if (response.status === 403) {
-        setError('The GM cannot join as a player.');
+        setError('The GM cannot make a character.');
         return;
       }
 
