@@ -126,12 +126,13 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [X] **Node.js/Express HTTP service** - Done
+- [X] **Static middleware for frontend** - Done
+- [X] **Calls to third party endpoints** - The game.jsx file allows the gm to fetch random monster names from the Open5e API.
+- [X] **Backend service endpoints** - Endpoints for authentication (/auth/create, /auth/login, /auth/logout) and game management (/game, /game/join, /game/state) have been implemented.
+- [X] **Frontend calls service endpoints** - Used fetch throughout the React components to call login, registration, game creation, joining, and state updates.
+- [X] **Supports registration, login, logout, and restricted endpoint** - Users can create an account, log in/out, and protected endpoints require authentication via cookies.
+- [X] **Uses BCrypt to hash passwords** – Passwords are hashed with bcryptjs in createUser before storage
 
 ## 🚀 DB deliverable
 
